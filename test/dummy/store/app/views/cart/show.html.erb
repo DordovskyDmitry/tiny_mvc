@@ -1,0 +1,15 @@
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Quantity</th>
+    <th>Price</th>
+  </tr>
+  <% @products.each do |(name, items)| %>
+      <tr>
+        <td><a href='/products/<%= name %>'><%= name %></a></td>
+        <td><%= items.count %></td>
+        <td><%= items.reduce(0){|sum, item| sum + item.price} %></td>
+      </tr>
+  <% end %>
+</table>
+<b>Total price:</b> <%= @cart.total_price %>
