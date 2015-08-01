@@ -21,6 +21,6 @@ class Cart
   end
 
   def total_price
-    @products.map(&:price).reduce(&:+)
+    @products.map(&:price).map(&:to_i).reduce(&:+)
   end
 end

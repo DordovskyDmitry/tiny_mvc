@@ -58,7 +58,7 @@ module TinyMVC
   end
 
   class MiddlewareStack
-    DEFAULT_STACK = [TinyMVC::RouteMiddleware]
+    DEFAULT_STACK = [Rack::MethodOverride, TinyMVC::RouteMiddleware]
 
     def initialize
       @stack = []

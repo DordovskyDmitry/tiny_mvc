@@ -8,7 +8,7 @@
       <tr>
         <td><a href='/products/<%= name %>'><%= name %></a></td>
         <td><%= items.count %></td>
-        <td><%= items.reduce(0){|sum, item| sum + item.price} %></td>
+        <td><%= items.reduce(0){|sum, item| sum + item.price.to_i} %></td>
       </tr>
   <% end %>
 </table>

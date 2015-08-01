@@ -2,7 +2,7 @@ module TinyMVC
   class Model
     attr_reader :id
 
-    def initialize(options)
+    def initialize(options = {})
       parameters = self.class.stored_parameters + [:id]
       parameters.each do |attr|
         instance_variable_set(:"@#{attr}", options[attr.to_s] || options[attr.to_sym])
