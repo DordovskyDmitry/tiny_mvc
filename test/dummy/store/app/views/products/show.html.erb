@@ -1,1 +1,5 @@
 <dl><dt>Name</dt><dd><%= @product.name %></dd><dt>Price</dt><dd><%= @product.price %></dd></dl>
+<form action='/cart' method='POST'>
+  <input type='hidden' name='id' value='<%= @product.id %>'>
+  <input type='submit' value='Add to cart'>
+</form>
