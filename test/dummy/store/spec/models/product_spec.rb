@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require_relative '../spec_helper'
 
 describe Product do
   let(:product) { Product.new(name: 'pen', price: 12) }

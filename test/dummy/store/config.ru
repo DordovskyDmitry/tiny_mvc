@@ -1,3 +1,4 @@
-require_relative 'config/setup'
+$LOAD_PATH << '.'
+require 'config/setup'
 Store::Application.init!(self)
 run Store::Application

@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require_relative '../spec_helper'
 
 describe Cart do
   let(:pen) { Product.new(name: 'pen', price: 12).save }
