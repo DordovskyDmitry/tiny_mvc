@@ -3,7 +3,13 @@ require 'json'
 
 module TinyMVC
   class RedisModel < Model
-    @@connection = ::Redis.new(:host => '127.0.0.1', :port => 6379) # TODO extract to config
+
+    def self.inherited(_)
+      @@connection ||= begin
+        redis_config = JSON.parse(File.read(TinyMVC.root + '/config/redis.json'))
+         ::Redis.new(redis_config)
+      end
+    end
 
     def self.connection
       @@connection
