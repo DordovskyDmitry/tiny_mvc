@@ -22,8 +22,8 @@ module TinyMVC
         instance
       end
 
-      def method_missing(name, args, &block)
-        instance.send(name, args, &block)
+      def method_missing(*args)
+        instance.send(*args)
       end
 
       def respond_to_missing?(method_name, include_private = false)
@@ -39,18 +39,27 @@ module TinyMVC
       @root = ENV['PWD']
     end
 
-    def init!(builder)
-      init_middlewares(builder)
-      init_app
+    def init!
+      init_middlewares
+      load_app
+    end
+
+    def call(env)
+      @app_stack.call(env)
+    rescue StandardError => e
+      [500, {}, [e.message]]
     end
 
     private
 
-    def init_middlewares(builder)
-      middleware_stack.each { |m| m.used_by(builder) }
+    def init_middlewares
+      middleware_stack.insert(ApplicationMiddleware.new)
+      @app_stack = middleware_stack.reverse.reduce { |app, wrapper|
+        wrapper.wrap(app.rack_app)
+      }.rack_app
     end
 
-    def init_app
+    def load_app
       load_paths.each do |path|
         Dir[File.join(root, path, '**/*.rb')].each { |f| require f }
       end
@@ -70,6 +79,10 @@ module TinyMVC
       @stack.insert(index, Middleware.new(*middleware))
     end
 
+    def reverse
+      @stack.reverse
+    end
+
     def each
       if block_given?
         @stack.each { |m| yield(m) }
@@ -79,9 +92,10 @@ module TinyMVC
     end
   end
 
-  class Middleware < Struct.new(:name, :args)
-    def used_by(builder)
-      args ? builder.use(name, args) : builder.use(name)
+  class Middleware < Struct.new(:rack_app, :options)
+    def wrap(app)
+      ra = options ? rack_app.new(app, options) : rack_app.new(app)
+      Middleware.new(ra)
     end
   end
 end

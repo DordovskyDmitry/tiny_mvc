@@ -1,5 +1,5 @@
 module TinyMVC
-  class Application
+  class ApplicationMiddleware
     def call(env)
       Object.const_get("#{env['controller'].capitalize}Controller").new.call(env)
     rescue StandardError => e
