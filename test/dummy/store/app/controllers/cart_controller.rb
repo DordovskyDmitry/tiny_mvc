@@ -7,7 +7,7 @@ class CartController < TinyMVC::BaseController
       session[:cart] = Cart.add_product(session[:cart], product)
       redirect_to('/products')
     else
-      raise NotFoundException, 'Product not found'
+      raise TinyMVC::NotFoundException, 'Product not found'
     end
   end
 
