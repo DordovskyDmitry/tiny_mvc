@@ -28,6 +28,10 @@ module TinyMVC
       raise NotImplementedError
     end
 
+    def self.create(options)
+      new(options).save
+    end
+
     def self.delete_all
       raise NotImplementedError
     end

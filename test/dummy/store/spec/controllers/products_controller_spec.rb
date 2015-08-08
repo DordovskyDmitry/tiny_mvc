@@ -1,7 +1,7 @@
 require_relative '../spec_helper'
 
 describe ProductsController do
-  let(:product) { Product.new(name: 'pen', price: 12) }
+  let(:product) { Product.create(name: 'pen', price: 12) }
 
   let(:app) {
     Rack::Builder.new do
