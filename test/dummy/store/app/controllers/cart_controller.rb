@@ -1,4 +1,4 @@
-class CartController < TinyMVC::ApplicationController
+class CartController < TinyMVC::BaseController
   layout 'app/views/layout.html.erb'
 
   def update

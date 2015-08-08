@@ -1,4 +1,4 @@
-class ProductsController < TinyMVC::ApplicationController
+class ProductsController < TinyMVC::BaseController
   layout 'app/views/layout.html.erb'
 
   def index

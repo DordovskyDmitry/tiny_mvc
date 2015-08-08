@@ -1,5 +1,5 @@
 module TinyMVC
-  class ApplicationController
+  class BaseController
 
     attr_accessor :headers
 
