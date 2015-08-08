@@ -1,5 +1,5 @@
 module TinyMVC
-  class Model
+  class BaseModel
     attr_reader :id
 
     def initialize(options = {})

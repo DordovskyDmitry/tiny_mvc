@@ -2,7 +2,7 @@ require 'redis'
 require 'json'
 
 module TinyMVC
-  class RedisModel < Model
+  class RedisModel < BaseModel
 
     def self.inherited(_)
       @@connection ||= begin
