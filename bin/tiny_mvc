@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/generators/app'
+if ARGV[0].downcase == 'generate' && ARGV[1]
+  TinyMVC::Generators::App.new(ARGV[1]).generate!
+else
+  p 'tiny_mvc generate MyApp'
+end
