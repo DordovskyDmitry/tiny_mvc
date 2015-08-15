@@ -9,10 +9,10 @@ module TinyMVC
         @name, @options = name, options
         @app = name.split(/[_-]/).map(&:capitalize).join('')
         @template = Template.new(self)
+        @current_dir = File.dirname(__FILE__)
       end
 
       def generate!
-        current_dir = File.dirname(__FILE__)
         mkdir @name do
           mkdir 'app' do
             mkdir 'controllers'
@@ -20,9 +20,9 @@ module TinyMVC
             mkdir 'views'
           end
           mkdir 'config' do
-            create_file('setup.rb', "#{current_dir}/templates/setup.rb.erb")
-            create_file('routes.rb', "#{current_dir}/templates/routes.rb.erb")
-            create_file('redis.json', "#{current_dir}/templates/redis.json.erb")
+            create_file('setup.rb')
+            create_file('routes.rb')
+            create_file('redis.json')
           end
           mkdir 'lib'
           mkdir 'public' do
@@ -30,7 +30,10 @@ module TinyMVC
             mkdir 'javascripts'
             mkdir 'images'
           end
-          create_file('config.ru', "#{current_dir}/templates/config.ru.erb")
+          create_file('config.ru')
+          create_file('Gemfile')
+          create_file('README.md')
+          FileUtils.touch('.gitignore')
         end
       end
 
@@ -49,7 +52,8 @@ module TinyMVC
       end
 
       def create_file(name, template = nil)
-        interior = @template.render(template) if template
+        template ||= "#{@current_dir}/templates/#{name}.erb"
+        interior = @template.render(template) if File.exists?(template)
         File.open(name, 'w+'){ |file| file.write interior }
       end
     end
