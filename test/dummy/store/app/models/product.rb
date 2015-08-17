@@ -1,3 +1,3 @@
 class Product < TinyMVC::RedisModel
-  stored_parameters :name, :price
+  attributes name: :string, price: :integer
 end

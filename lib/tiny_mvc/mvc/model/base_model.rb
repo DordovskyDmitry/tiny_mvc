@@ -1,19 +1,19 @@
 module TinyMVC
   class BaseModel
-    attr_reader :id
-
     def initialize(options = {})
-      parameters = self.class.stored_parameters + [:id]
-      parameters.each do |attr|
-        instance_variable_set(:"@#{attr}", options[attr.to_s] || options[attr.to_sym])
+      self.class.attributes.each do |attr|
+        self.send("#{attr}=", options[attr.to_s] || options[attr.to_sym])
       end
     end
 
-    def self.stored_parameters(*args)
-      return @stored_parameters if args.empty?
-      @stored_parameters = *args
-      @stored_parameters.freeze
-      attr_accessor *args
+    def self.attributes(attrs = nil)
+      @attrs ||= add_attribute(:id, :integer) && [:id]
+      return @attrs unless attrs
+
+      attrs.each { |attr, type| add_attribute(attr, type) }
+
+      @attrs += attrs.keys
+      @attrs.uniq!
     end
 
     def self.all
@@ -55,9 +55,32 @@ module TinyMVC
     end
 
     def attributes
-      parameters = self.class.stored_parameters + [:id]
-      parameters.reduce({}) do |hash, attr|
-        hash.merge(attr => instance_variable_get("@#{attr}"))
+      self.class.attributes.reduce({}) do |hash, attr|
+        hash.merge(attr => self.send(attr))
+      end
+    end
+
+    private
+
+    def self.add_attribute(attr, type)
+      attr_reader attr
+
+      define_method "#{attr}=" do |value|
+        instance_variable_set(:"@#{attr}", type_cast(value, type))
+      end
+    end
+
+    def type_cast(value, type = nil)
+      return if value.nil?
+      case type.to_sym
+        when :integer
+          value.to_i
+        when :float
+          value.to_f
+        when :string
+          value.to_s
+        else
+          value
       end
     end
   end
