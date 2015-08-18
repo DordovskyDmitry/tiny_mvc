@@ -1,16 +1,23 @@
 module TinyMVC
   class BaseModel
+    attr_reader :id
+
     def initialize(options = {})
       self.class.attributes.each do |attr|
-        self.send("#{attr}=", options[attr.to_s] || options[attr.to_sym])
+        if attr.to_sym == :id
+          @id = options[:id] || options['id']
+        else
+          value = options[attr.to_s] || options[attr.to_sym]
+          self.send("#{attr}=", value) unless value.nil?
+        end
       end
     end
 
     def self.attributes(attrs = nil)
-      @attrs ||= add_attribute(:id, :integer) && [:id]
+      @attrs ||= [:id]
       return @attrs unless attrs
 
-      attrs.each { |attr, type| add_attribute(attr, type) }
+      attrs.reject{|x| x.to_sym == :id}.each { |attr, type| add_attribute(attr, type) }
 
       @attrs += attrs.keys
       @attrs.uniq!
