@@ -1,5 +1,8 @@
+require_relative 'db_api'
+
 module TinyMVC
   class BaseModel
+    include TinyMVC::DbApi
     attr_reader :id
 
     def initialize(options = {})
@@ -21,36 +24,6 @@ module TinyMVC
 
       @attrs += attrs.keys
       @attrs.uniq!
-    end
-
-    def self.all
-      raise NotImplementedError
-    end
-
-    def self.find(id)
-      raise NotImplementedError
-    end
-
-    def self.count
-      raise NotImplementedError
-    end
-
-    def self.create(options)
-      new(options).save
-    end
-
-    def self.delete_all
-      raise NotImplementedError
-    end
-
-    # should generate @id for new record and return self
-    def save
-      raise NotImplementedError
-    end
-
-    # should return self
-    def delete
-      raise NotImplementedError
     end
 
     def ==(obj)
